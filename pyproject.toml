@@ -8,21 +8,21 @@ repository = "https://github.com/RoboJackets/loop-engage-upload"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-requests = "^2.31"
-selenium = "^4.11"
-webdriver-manager = "^4.0"
-werkzeug = "^3.0.1"
+requests = "2.31.0"
+selenium = "4.15.2"
+webdriver-manager = "4.0.1"
+werkzeug = "3.0.1"
 
 [tool.poetry.group.dev.dependencies]
 types-requests = "^2.28.11.2"
-black = "*"
-flake8 = "*"
-flake8-black = "*"
-flake8-bugbear = "*"
-flake8-import-order = "*"
-flake8-json = "*"
-mypy = "*"
-pylint = "*"
+black = "23.10.1"
+flake8 = "6.1.0"
+flake8-black = "0.3.6"
+flake8-bugbear = "23.9.16"
+flake8-import-order = "0.18.2"
+flake8-json = "23.7.0"
+mypy = "1.6.1"
+pylint = "3.0.2"
 
 [tool.poetry.scripts]
 engage-upload = 'loop_engage_upload:main'
@@ -45,5 +45,5 @@ allow-global-unused-variables = false
 disallow_untyped_calls = false
 
 [build-system]
-requires = ["poetry_core>=1.0.0"]
+requires = ["poetry_core==1.8.1"]
 build-backend = "poetry.core.masonry.api"
