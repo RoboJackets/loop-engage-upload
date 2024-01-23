@@ -9,7 +9,7 @@ repository = "https://github.com/RoboJackets/loop-engage-upload"
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "2.31.0"
-selenium = "4.17.1"
+selenium = "4.17.2"
 webdriver-manager = "4.0.1"
 werkzeug = "3.0.1"
 
