@@ -212,7 +212,7 @@ def main() -> None:
     print("Retrieving list of requests from Engage")
     engage_response = get(
         url="https://gatech.campuslabs.com/engage/api/finance/robojackets/requests/purchase/list-items",
-        params={"take": 100},
+        params={"take": 200},
         cookies=cookies,
         timeout=(5, 5),
     )
