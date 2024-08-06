@@ -7,7 +7,7 @@ authors = ["Kristaps Berzinch <kristaps@berzin.ch>"]
 repository = "https://github.com/RoboJackets/loop-engage-upload"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.12.4"
 requests = "2.32.3"
 selenium = "4.23.1"
 webdriver-manager = "4.0.2"
