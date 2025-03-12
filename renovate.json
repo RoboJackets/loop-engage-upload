@@ -24,15 +24,6 @@
     },
     "packageRules": [
         {
-            "matchCategories": [
-                "python"
-            ],
-            "lockFileMaintenance": {
-                "enabled": true,
-                "schedule": [
-                    "before 4pm every weekday except before 9am every weekday"
-                ]
-            },
             "matchDepNames": [
                 "python"
             ],
