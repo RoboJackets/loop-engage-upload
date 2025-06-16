@@ -20,7 +20,7 @@ flake8 = "7.2.0"
 flake8-black = "0.3.6"
 flake8-bugbear = "24.12.12"
 flake8-import-order = "0.19.0"
-mypy = "1.16.0"
+mypy = "1.16.1"
 pylint = "3.3.7"
 
 [tool.poetry.scripts]
