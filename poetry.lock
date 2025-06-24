@@ -382,13 +382,13 @@ dev = ["coverage", "hypothesis", "hypothesmith (>=0.2)", "pre-commit", "pytest",
 
 [[package]]
 name = "flake8-import-order"
-version = "0.19.1"
+version = "0.19.2"
 description = "Flake8 and pylama plugin that checks the ordering of import statements."
 optional = false
 python-versions = "*"
 files = [
-    {file = "flake8_import_order-0.19.1-py3-none-any.whl", hash = "sha256:8235d8cba5bead8e119dc129b7286df2d92046ceebbd48fc18394abe57c5f467"},
-    {file = "flake8_import_order-0.19.1.tar.gz", hash = "sha256:e071477eb9aaddbb75d30543cec0f83e1858502990d82bd8262f5a7575527fd0"},
+    {file = "flake8_import_order-0.19.2-py3-none-any.whl", hash = "sha256:2dfe60175e7195cf36d4c573861fd2e3258cd6650cbd7616da3c6b8193b29b7c"},
+    {file = "flake8_import_order-0.19.2.tar.gz", hash = "sha256:133b3c55497631e4235074fc98a95078bba817832379f22a31f0ad2455bcb0b2"},
 ]
 
 [package.dependencies]
@@ -1003,4 +1003,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "fd8862f3ced30a95ed88036e858690fc8a04ee63ea682184223383b9b28e0aa1"
+content-hash = "e2c1fe51b177590cba724c9b4ae10258cbe7c6200433c7549fab0c8434c747ba"
