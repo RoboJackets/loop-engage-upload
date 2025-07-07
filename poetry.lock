@@ -744,21 +744,20 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "selenium"
-version = "4.34.0"
+version = "4.34.1"
 description = "Official Python bindings for Selenium WebDriver"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "selenium-4.34.0-py3-none-any.whl", hash = "sha256:fc3535cfd99a073c21bf9091519b48ed31b34bf2cbd132f62e8c732b2e815b2d"},
-    {file = "selenium-4.34.0.tar.gz", hash = "sha256:8b7eb05a0ed22f9bb2187fd256c28630824ad01d8397b4e68bc0af7dabf26c80"},
+    {file = "selenium-4.34.1-py3-none-any.whl", hash = "sha256:1a67bee7b80dca39528666f2fa40827ee9733a831e43ff1abcad1db5bcd6f0df"},
 ]
 
 [package.dependencies]
-certifi = ">=2025.4.26"
+certifi = ">=2025.6.15"
 trio = ">=0.30.0,<0.31.0"
 trio-websocket = ">=0.12.2,<0.13.0"
 typing_extensions = ">=4.14.0,<4.15.0"
-urllib3 = {version = ">=2.4.0,<2.5.0", extras = ["socks"]}
+urllib3 = {version = ">=2.5.0,<2.6.0", extras = ["socks"]}
 websocket-client = ">=1.8.0,<1.9.0"
 
 [[package]]
@@ -919,13 +918,13 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.4.0"
+version = "2.5.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "urllib3-2.4.0-py3-none-any.whl", hash = "sha256:4e16665048960a0900c702d4a66415956a584919c03361cac9f1df5c5dd7e813"},
-    {file = "urllib3-2.4.0.tar.gz", hash = "sha256:414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466"},
+    {file = "urllib3-2.5.0-py3-none-any.whl", hash = "sha256:e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc"},
+    {file = "urllib3-2.5.0.tar.gz", hash = "sha256:3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760"},
 ]
 
 [package.dependencies]
@@ -1003,4 +1002,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "55c99c401edfd0edfa842f744d75d8fa92e8b4de8799d4e84a29a4d3ec0d6f79"
+content-hash = "03f0c62e4ef66352af2b31f20bcbbf4a5ea8c29ec9d20d8bc30be7ae5277b8a3"
