@@ -20,7 +20,7 @@ flake8 = "7.3.0"
 flake8-bugbear = "24.12.12"
 flake8-import-order = "0.19.2"
 mypy = "1.18.2"
-pylint = "4.0.1"
+pylint = "4.0.2"
 
 [tool.poetry.scripts]
 engage-upload = 'loop_engage_upload:main'
