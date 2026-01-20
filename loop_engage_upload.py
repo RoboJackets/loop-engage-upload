@@ -149,7 +149,7 @@ def sync_attachment(cookies: Dict[str, str], engage_id: str, attachment_url: str
         print(engage_attachment_response.text)
         raise ValueError("Unexpected response code from engage")
 
-    (value, options) = parse_options_header(engage_attachment_response.headers.get("Content-Disposition"))
+    value, options = parse_options_header(engage_attachment_response.headers.get("Content-Disposition"))
 
     print(f"Uploading attachment {engage_document_id} to Loop")
 
