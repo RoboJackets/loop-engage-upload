@@ -140,7 +140,7 @@ description = "Foreign Function Interface for Python calling C code."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "implementation_name != \"pypy\" and os_name == \"nt\""
+markers = "os_name == \"nt\" and implementation_name != \"pypy\""
 files = [
     {file = "cffi-2.0.0-cp310-cp310-macosx_10_13_x86_64.whl", hash = "sha256:0cf2d91ecc3fcc0625c2c530fe004f82c110405f101548512cce44322fa8ac44"},
     {file = "cffi-2.0.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:f73b96c41e3b2adedc34a7356e64c8eb96e03a3782b535e043a986276ce12a49"},
@@ -898,7 +898,7 @@ description = "C parser in Python"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
-markers = "implementation_name != \"pypy\" and implementation_name != \"PyPy\" and os_name == \"nt\""
+markers = "os_name == \"nt\" and implementation_name != \"pypy\" and implementation_name != \"PyPy\""
 files = [
     {file = "pycparser-3.0-py3-none-any.whl", hash = "sha256:b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992"},
     {file = "pycparser-3.0.tar.gz", hash = "sha256:600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29"},
@@ -1031,14 +1031,14 @@ dev = ["black", "build", "mypy", "pytest", "pytest-cov", "setuptools", "tox", "t
 
 [[package]]
 name = "requests"
-version = "2.33.1"
+version = "2.34.0"
 description = "Python HTTP for Humans."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "requests-2.33.1-py3-none-any.whl", hash = "sha256:4e6d1ef462f3626a1f0a0a9c42dd93c63bad33f9f1c1937509b8c5c8718ab56a"},
-    {file = "requests-2.33.1.tar.gz", hash = "sha256:18817f8c57c6263968bc123d237e3b8b08ac046f5456bd1e307ee8f4250d3517"},
+    {file = "requests-2.34.0-py3-none-any.whl", hash = "sha256:917520a21b767485ce7c588f4ebb917c436b24a31231b44228715eaeb5a52c60"},
+    {file = "requests-2.34.0.tar.gz", hash = "sha256:7d62fe92f50eb82c529b0916bb445afa1531a566fc8f35ffdc64446e771b856a"},
 ]
 
 [package.dependencies]
@@ -1343,4 +1343,4 @@ h11 = ">=0.16.0,<1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "a9abc454f6713bd22f838c73d80a7067cc3db4dad9ad8a6575b0d892449974ab"
+content-hash = "225966058a3d1e6af83b3297a3013ac09705f858298c279f28bdc6b85da6f171"
