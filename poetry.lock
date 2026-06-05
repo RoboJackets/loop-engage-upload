@@ -1277,14 +1277,14 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
 name = "webdriver-manager"
-version = "4.1.1"
+version = "4.1.2"
 description = "Library provides the way to automatically manage drivers for different browsers"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "webdriver_manager-4.1.1-py3-none-any.whl", hash = "sha256:4cedd217862e3fe324fadf7423fc9757c40af5979dda36493712c6c751224df1"},
-    {file = "webdriver_manager-4.1.1.tar.gz", hash = "sha256:3832f4ab2186c86496b5c0a6d362357a294ca8c2be9972b49d089b809e262687"},
+    {file = "webdriver_manager-4.1.2-py3-none-any.whl", hash = "sha256:552bbb4e6f95e6e8b772565d2023e7c0ec5ff1736db0b186922d0466fc78c3de"},
+    {file = "webdriver_manager-4.1.2.tar.gz", hash = "sha256:230515ff4dc4c2feff1add25306ca262421b31016d77ded305e8dd921266445f"},
 ]
 
 [package.dependencies]
@@ -1345,4 +1345,4 @@ h11 = ">=0.16.0,<1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "aef15170dac61479bfbadae3e9b07d45a8ad73f764698c1fa948b81835221e07"
+content-hash = "bdada99fd0a79ed31dd3853029aa06dd9c1549357a16337ccb5f025e35040251"
