@@ -6,47 +6,166 @@ from argparse import ArgumentParser
 from html import unescape
 from json import dumps
 from re import findall
-from typing import Dict
-from urllib.parse import parse_qs, urljoin, urlparse
+from typing import Dict, Optional, Tuple
+from urllib.parse import parse_qs, quote, urljoin, urlparse
 
-from requests import get, post, put
+from bs4 import BeautifulSoup
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-
-from webdriver_manager.chrome import ChromeDriverManager
+from requests import Session, get, post, put
 
 from werkzeug.http import parse_options_header
 
+DEFAULT_CAS_HOST = "sso.gatech.edu"
+ENGAGE_CAS_SERVICE = "https://federation.campuslabs.com/auth/signin/"
+ENGAGE_LOGIN_URL = "https://gatech.campuslabs.com/engage/account/login?returnUrl=/engage/"
+GET_TGT_URL = "https://{hostname}/cas/v1/tickets"
+HTML_PARSER = "html.parser"
 
-def log_in_to_engage(driver: WebDriver, username: str, password: str) -> None:
+
+def get_ticket_granting_ticket_url(
+    hostname: str, session: Session, username: str, password: str
+) -> Tuple[int, Optional[str]]:
     """
-    Log in to Engage via CAS
+    Exchanges a username and password for a TGT
+
+    Duo push is handled by CAS during this request.
+    """
+    response = session.post(
+        GET_TGT_URL.format(hostname=hostname),
+        data={"username": username, "password": password},
+    )
+
+    if response.status_code in (423, 401):
+        return response.status_code, None
+
+    tgt_url = BeautifulSoup(response.text, HTML_PARSER).form["action"]  # type: ignore
+
+    assert isinstance(tgt_url, str)
+
+    return 200, tgt_url
+
+
+def start_engage_sso(session: Session) -> None:
+    """
+    Follow Engage login redirects through CampusLabs IdentityServer/federation
+
+    Stops once CAS is about to be invoked, after federation has set FpContext and
+    Engage/IdentityServer have correlation cookies needed to finish the login.
+    """
+    url = ENGAGE_LOGIN_URL
+    for _ in range(15):
+        response = session.get(url, allow_redirects=False, timeout=(5, 30))
+        location = response.headers.get("Location")
+
+        if location is None or response.status_code not in (301, 302, 303, 307, 308):
+            print(response.status_code)
+            print(response.text[:500])
+            raise ValueError("Unexpected response while starting Engage SSO")
+
+        if location.startswith("/"):
+            next_url = urljoin(url, location)
+        else:
+            next_url = location
+
+        if "cas/login" in next_url or "login.gatech.edu" in next_url or "sso.gatech.edu" in next_url:
+            return
+
+        url = next_url
+
+    raise ValueError("Exceeded redirect limit while starting Engage SSO")
+
+
+def submit_auto_post_forms(session: Session, response) -> None:
+    """
+    Submit browser-style auto-POST forms (WS-Fed / OIDC callbacks) until done
+    """
+    for _ in range(10):
+        soup = BeautifulSoup(response.text, HTML_PARSER)
+        form = soup.find("form")
+        if form is None:
+            return
+
+        action = form.get("action")
+        if not isinstance(action, str) or not action:
+            return
+
+        action_url = urljoin(response.url, action)
+        method_attr = form.get("method")
+        method = method_attr.lower() if isinstance(method_attr, str) else "get"
+        payload: Dict[str, str] = {}
+        for input_tag in form.find_all("input"):
+            name = input_tag.get("name")
+            if isinstance(name, str) and name:
+                value = input_tag.get("value")
+                payload[name] = value if isinstance(value, str) else ""
+
+        if method == "post":
+            response = session.post(action_url, data=payload, timeout=(5, 60))
+        else:
+            response = session.get(action_url, params=payload, timeout=(5, 60))
+
+        if response.status_code != 200:
+            print(response.status_code)
+            print(response.text[:500])
+            raise ValueError("Unexpected response while completing CampusLabs SSO callbacks")
+
+    raise ValueError("Exceeded form-submit limit while completing CampusLabs SSO")
+
+
+def log_in_to_engage(session: Session, username: str, password: str) -> None:
+    """
+    Log in to Engage via CAS REST ticket API
     """
     print("Starting Engage authentication")
-    driver.get("https://gatech.campuslabs.com/engage/account/login?returnUrl=/engage/")
+    print("Starting CampusLabs SSO redirect chain")
+    start_engage_sso(session)
 
-    # wait for CAS login page to load
-    WebDriverWait(driver, timeout=10).until(lambda d: d.find_element(By.ID, "username"))
+    print("Requesting CAS ticket-granting ticket (approve Duo push if prompted)")
+    status_code, tgt_url = get_ticket_granting_ticket_url(DEFAULT_CAS_HOST, session, username, password)
 
-    # enter username, password, and submit the form
-    username_field = driver.find_element(By.ID, "username")
-    password_field = driver.find_element(By.ID, "password")
-    submit_button = driver.find_element(By.NAME, "submitbutton")
+    if status_code == 401:
+        raise ValueError("Invalid Georgia Tech username or password")
 
-    print("Entering username")
-    username_field.send_keys(username)
-    print("Entering password")
-    password_field.send_keys(password)
-    print("Submitting login form")
-    submit_button.click()
+    if status_code == 423:
+        raise ValueError("CAS returned a 423 error (account locked or similar)")
 
-    # wait for Duo authentication to finish, redirect to Engage, and wait for Engage to fully load
-    print("Waiting for authentication to complete")
-    WebDriverWait(driver, timeout=20).until(lambda d: d.title == "Explore - Georgia Institute of Technology")
+    if tgt_url is None:
+        raise ValueError("Failed to retrieve a CAS ticket-granting ticket")
+
+    print("Exchanging TGT for Engage service ticket")
+    service_ticket_response = session.post(tgt_url, data={"service": ENGAGE_CAS_SERVICE})
+
+    if service_ticket_response.status_code != 200:
+        print(service_ticket_response.status_code)
+        print(service_ticket_response.text)
+        raise ValueError("Unexpected response code from CAS while retrieving service ticket")
+
+    service_ticket = service_ticket_response.text
+    print("Redeeming service ticket at CampusLabs federation")
+    federation_response = session.get(
+        ENGAGE_CAS_SERVICE + "?ticket=" + quote(service_ticket),
+        timeout=(5, 60),
+    )
+
+    if federation_response.status_code != 200:
+        print(federation_response.status_code)
+        print(federation_response.text)
+        raise ValueError("Unexpected response code from CampusLabs federation")
+
+    print("Completing CampusLabs SSO callbacks")
+    submit_auto_post_forms(session, federation_response)
+
+    print("Following through to Engage")
+    engage_response = session.get(
+        "https://gatech.campuslabs.com/engage/",
+        timeout=(5, 30),
+    )
+    if engage_response.status_code != 200:
+        print(engage_response.status_code)
+        print(engage_response.text[:500])
+        raise ValueError("Unexpected response code from Engage after login")
+
+    print("Engage authentication complete")
 
 
 def sync_purchase_request(cookies: Dict[str, str], engage_id: str, server: str, token: str) -> None:
@@ -199,15 +318,9 @@ def main() -> None:
         required=True,
     )
     args = parser.parse_args()
-    driver = webdriver.Chrome(service=Service(executable_path=ChromeDriverManager().install()))
-    driver.maximize_window()
-
-    log_in_to_engage(driver, args.georgia_tech_username, args.georgia_tech_password)
-
-    cookies = {}
-
-    for cookie in driver.get_cookies():
-        cookies[cookie["name"]] = cookie["value"]
+    session = Session()
+    log_in_to_engage(session, args.georgia_tech_username, args.georgia_tech_password)
+    cookies = session.cookies.get_dict()
 
     print("Retrieving list of requests from Engage")
     engage_response = get(

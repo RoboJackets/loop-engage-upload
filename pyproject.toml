@@ -8,9 +8,8 @@ repository = "https://github.com/RoboJackets/loop-engage-upload"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+beautifulsoup4 = "4.14.3"
 requests = "2.34.2"
-selenium = "4.46.0"
-webdriver-manager = "4.1.2"
 werkzeug = "3.1.8"
 
 [tool.poetry.group.dev.dependencies]
