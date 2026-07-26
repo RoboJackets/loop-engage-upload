@@ -11,7 +11,7 @@ from urllib.parse import parse_qs, quote, urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
-from requests import Session, get, post, put
+from requests import Session, get, post, put, Response
 
 from werkzeug.http import parse_options_header
 
@@ -75,7 +75,7 @@ def start_engage_sso(session: Session) -> None:
     raise ValueError("Exceeded redirect limit while starting Engage SSO")
 
 
-def submit_auto_post_forms(session: Session, response) -> None:
+def submit_auto_post_forms(session: Session, response: Response) -> None:
     """
     Submit browser-style auto-POST forms (WS-Fed / OIDC callbacks) until done
     """
