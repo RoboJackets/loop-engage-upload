@@ -11,7 +11,7 @@ from urllib.parse import parse_qs, quote, urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
-from requests import Session, get, post, put, Response
+from requests import Response, Session, get, post, put
 
 from werkzeug.http import parse_options_header
 
